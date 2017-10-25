@@ -8,13 +8,15 @@ import './TrackList.css';
 
 class TrackList extends React.Component{
   render(){
-    <div className="TrackList">
-        {
-            this.props.tracks.map(function (track){
-            return (<Track key={track.id} track={track}/>);
-          })
-        }
-    </div>
+    return(
+      <div className="TrackList">
+          {
+              this.props.tracks.map(function (track){
+              return (<Track key={track.id} track={track}/>);
+            })
+          }
+      </div>
+    );
   }
 }
 
