@@ -25,28 +25,18 @@ class App extends Component {
     this.search = this.search.bind(this);
   }
 
-  addTrack(track){
-    /*You could use a combination of `.map` and `.some` to check if
-      there is some track with the added tracks ID already playlistTracks.*/
-    if(this.state.playlistTracks.map(function(playlistTrack,track){
-        playlistTrack.some(function(playlistTrack,track){
-          return (playlistTrack === track);
-        })
-    })){
-      let updatedPlaylist = this.state.playlistTracks.concat(track);
-      this.setState({ playlistTracks: updatedPlaylist });
-    }
-  }
+  addTrack(track) {
+     let tracks = this.state.playlistTracks;
+     if (!tracks.includes(track)) {
+       tracks.push(track);
+       this.setState({playlistTracks: tracks});
+     }
+ }
 
   removeTrack(track){
-    if(this.state.playlistTracks.map(function(playlistTrack,track){
-        playlistTrack.some(function(playlistTrack,track){
-          return (playlistTrack === track);
-        })
-    })){
-      let updatedPlaylist = this.state.playlistTracks.concat(track);
-      this.setState({ playlistTracks: updatedPlaylist });
-    }
+    let tracks = this.state.playlistTracks;
+    tracks = tracks.filter(currentTrack => currentTrack.id !== track.id);
+    this.setState({playlistTracks: tracks});
   }
 
   updatePlaylistName(name){

@@ -9,32 +9,33 @@ class Track extends React.Component {
     this.removeTrack = this.removeTrack.bind(this);
   }
 
-  renderAction(){
-    if(this.isRemoval === true){
-      return '-';
+  renderAction() {
+    console.log(this.props.isRemoval);
+    if (this.props.isRemoval) {
+      return <a className="Track-action" onClick={this.removeTrack}>-</a>
     }else{
-      return '+';
+      return <a className="Track-action" onClick={this.addTrack}>+</a>;
     }
   }
 
+
   addTrack(){
-    //Pass this.props.track to this.props.onAdd.
+    console.log(this.props);
     this.props.onAdd(this.props.track);
   }
 
   removeTrack(){
-    //Pass this.props.track to this.props.onRemove.
     this.props.onRemove(this.props.track);
   }
 
   render() {
-    return(
+    return (
       <div className="Track">
         <div className="Track-information">
           <h3>{this.props.track.name}</h3>
           <p>{this.props.track.artist} | {this.props.track.album}</p>
         </div>
-        <a className="Track-action" onClick={this.addTrack}>{ this.renderAction() }</a>
+        {this.renderAction()}
       </div>
     );
   }
