@@ -60,6 +60,7 @@ class App extends Component {
   }
 
   search(term){
+    console.log(term);
     Spotify.search(term).then(searchResults =>{
       this.setState({
         SearchResults : searchResults,
@@ -75,7 +76,7 @@ class App extends Component {
           <SearchBar onSearch={this.search}/>
           <div className="App-playlist">
             <SearchResults onAdd={this.addTrack} searchResults = {this.state.SearchResults}/>
-            <Playlist playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks} onRemove={this.onRemove} onNameChange={this.updatePlaylistName} onSave={this.savePlaylist}/>
+            <Playlist playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks} isRemoval={true} onRemove={this.removeTrack} onNameChange={this.updatePlaylistName} onSave={this.savePlaylist}/>
           </div>
         </div>
       </div>

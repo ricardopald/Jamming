@@ -1,5 +1,6 @@
 const clientId = '88bd5815920a49b9928740b638a9310b';
-const redirectURI='http://localhost:3000/';
+const redirectURI="http://localhost:3000/";
+let playlistID;
 
 let accessToken;
 
@@ -25,13 +26,19 @@ const Spotify = {
   },
 
   search(term) {
-    return fetch('https://api.spotify.com/v1/search?type=track&q={term}',{
+    if(!accessToken){
+      this.getAccessToken();
+    }
+    console.log(term);
+    console.log(accessToken);
+    return fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`,{
         headers: {Authorization: `Bearer ${accessToken}`}
     }).then(response =>{
       return response.json();
     }).then(jsonResponse =>{
       if(jsonResponse.tracks){
-        return jsonResponse.tracks.map(track => ({
+        console.log(jsonResponse.tracks);
+        return jsonResponse.tracks.items.map(track => ({
          id: track.id,
          name: track.name,
          artist: track.artists[0].name,
@@ -45,6 +52,8 @@ const Spotify = {
   },
 
   savePlaylist(playlistName, trackURIs){
+    this.getAccessToken();
+    console.log(trackURIs);
     if((trackURIs && trackURIs.length) && playlistName!==''){
       let accessTokenSP = accessToken;
       const headers = { Authorization : `Bearer ${accessTokenSP}` } ;
@@ -55,15 +64,17 @@ const Spotify = {
         return response.json();
       }).then(jsonResponse =>{
         userID = jsonResponse.id;
-        return fetch(`https://api.spotify.com//v1/users/${userID}/playlists/${trackURIs}/tracks`,{
-          headers: headers,
+        console.log(jsonResponse);
+        return fetch(`https://api.spotify.com/v1/users/${userID}/playlists`,{
+          headers: {'Authorization': `Bearer ${accessTokenSP}`},
           method: 'POST',
           body: JSON.stringify({'name': playlistName}),
         }).then(response =>{
+          console.log(response.json);
           return  response.json();
         }).then(jsonResponse =>{
           if(jsonResponse.id){
-            return jsonResponse.id;
+            return playlistID = jsonResponse.id;
           }
         });
       });
