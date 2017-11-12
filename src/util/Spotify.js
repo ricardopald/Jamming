@@ -1,6 +1,6 @@
 const clientId = '88bd5815920a49b9928740b638a9310b';
 const redirectURI="http://localhost:3000/";
-let playlistID;
+//let playlistID;
 
 let accessToken;
 
@@ -25,19 +25,14 @@ const Spotify = {
     }
   },
 
-  search(term) {
-    if(!accessToken){
-      this.getAccessToken();
-    }
-    console.log(term);
-    console.log(accessToken);
+async search(term) {
+    await this.getAccessToken();
     return fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`,{
         headers: {Authorization: `Bearer ${accessToken}`}
     }).then(response =>{
       return response.json();
     }).then(jsonResponse =>{
       if(jsonResponse.tracks){
-        console.log(jsonResponse.tracks);
         return jsonResponse.tracks.items.map(track => ({
          id: track.id,
          name: track.name,
@@ -51,9 +46,8 @@ const Spotify = {
     });
   },
 
-  savePlaylist(playlistName, trackURIs){
-    this.getAccessToken();
-    console.log(trackURIs);
+async  savePlaylist(playlistName, trackURIs){
+    await this.getAccessToken();//
     if((trackURIs && trackURIs.length) && playlistName!==''){
       let accessTokenSP = accessToken;
       const headers = { Authorization : `Bearer ${accessTokenSP}` } ;
@@ -71,10 +65,10 @@ const Spotify = {
           body: JSON.stringify({'name': playlistName}),
         }).then(response =>{
           console.log(response.json);
-          return  response.json();
+            return  response.json();
         }).then(jsonResponse =>{
           if(jsonResponse.id){
-            return playlistID = jsonResponse.id;
+            return jsonResponse.id;
           }
         });
       });
